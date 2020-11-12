@@ -19,6 +19,7 @@
 **/.env/**
 **/.idea/**
 **/migrations/**
+**/static/**
 # Created by https://www.gitignore.io
 
 ### OSX ###

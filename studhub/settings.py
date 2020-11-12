@@ -78,12 +78,15 @@ WSGI_APPLICATION = 'studhub.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "d5gdb3a5j0r2k",
+            "HOST": "ec2-52-31-94-195.eu-west-1.compute.amazonaws.com",
+            "POST": "5432",
+            "USER": "xfkictigpaezhs",
+            "PASSWORD": "8bd1a3bcc2e3344ecc86b8f048c32c984ffec21eed36a52e3d4ed37c61fa3e67"
+        }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -121,4 +124,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/frontend/static/'
