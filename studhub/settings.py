@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -27,7 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,9 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'backend',
-    'frontend',
+    'django_extensions',
+    'rest_framework',
+    'backend.account',
+    'backend.institute',
+    'oauth2_provider',
+    'mptt',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'studhub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'frontend/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -73,20 +74,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'studhub.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "d5gdb3a5j0r2k",
-            "HOST": "ec2-52-31-94-195.eu-west-1.compute.amazonaws.com",
-            "POST": "5432",
-            "USER": "xfkictigpaezhs",
-            "PASSWORD": "8bd1a3bcc2e3344ecc86b8f048c32c984ffec21eed36a52e3d4ed37c61fa3e67"
-        }
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "d5gdb3a5j0r2k",
+        "HOST": "ec2-52-31-94-195.eu-west-1.compute.amazonaws.com",
+        "POST": "5432",
+        "USER": "xfkictigpaezhs",
+        "PASSWORD": "8bd1a3bcc2e3344ecc86b8f048c32c984ffec21eed36a52e3d4ed37c61fa3e67"
+    }
 }
+
+AUTH_USER_MODEL = 'account.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -106,13 +108,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uk'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
@@ -120,8 +121,26 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/frontend/static/'
+
+# Redirect urls
+
+LOGIN_URL = 'admin:login'
+LOGOUT_URL = 'admin:logout'
+
+LOGIN_REDIRECT_URL = 'admin:login'
+LOGOUT_REDIRECT_URL = 'admin:login'
+
+# Rest Framework settings
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
