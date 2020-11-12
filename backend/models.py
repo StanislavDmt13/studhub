@@ -8,7 +8,7 @@ class BaseModel(models.Model):
         abstract = True
 
 
-class NameModel(BaseModel):
+class AbstractNameModel(BaseModel):
     name = models.CharField(max_length=NAME_MAX_LENGTH)
 
     def __str__(self):
@@ -18,8 +18,14 @@ class NameModel(BaseModel):
         abstract = True
 
 
-class AbstractCreatedUpdatedModel(models.Model):
+class AbstractCreatedModel(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        abstract = True
+
+
+class AbstractAbstractCreatedUpdatedModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'backend.account',
     'backend.institute',
+    'backend.product',
     'oauth2_provider',
     'mptt',
 ]
