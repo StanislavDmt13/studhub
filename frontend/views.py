@@ -1,5 +1,11 @@
+import os
 from django.shortcuts import render
+from django.http import FileResponse, JsonResponse
+from django.conf import settings
+from django.views.decorators.cache import cache_page
 
 
-def index(request):
-    return render(request, 'frontend/index.html')
+# Create your views here.
+
+def base(request):
+    return render(request, "base.html")
