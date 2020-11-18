@@ -7,16 +7,16 @@ class Tag(backend_models.AbstractNameModel):
     user = models.ForeignKey(account_models.User, on_delete=models.CASCADE, related_name="tags")
 
 
-class File(backend_models.AbstractCreatedModel):
-    name = models.FileField(upload_to="files/")
-
-
-class Product(backend_models.AbstractNameModel, backend_models.AbstractAbstractCreatedUpdatedModel):
+class Product(backend_models.AbstractNameModel, backend_models.AbstractCreatedUpdatedModel):
     owner = models.ForeignKey(account_models.User, on_delete=models.PROTECT, related_name="products")
     tags = models.ManyToManyField(Tag, related_name="products")
-    files = models.ManyToManyField(File, related_name="products")
-
     description = models.TextField(blank=True)
+
+
+class ProductFile(backend_models.AbstractCreatedModel):
+
+    file_name = models.FileField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='files')
 
 
 class Rate(backend_models.AbstractCreatedModel):
@@ -28,7 +28,7 @@ class Rate(backend_models.AbstractCreatedModel):
         unique_together = (("product", "user"),)
 
 
-class Comment(backend_models.AbstractAbstractCreatedUpdatedModel):
+class Comment(backend_models.AbstractCreatedUpdatedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="comments")
     user = models.ForeignKey(account_models.User, on_delete=models.CASCADE, related_name="comments")
 

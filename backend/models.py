@@ -25,7 +25,7 @@ class AbstractCreatedModel(models.Model):
         abstract = True
 
 
-class AbstractAbstractCreatedUpdatedModel(models.Model):
+class AbstractCreatedUpdatedModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
