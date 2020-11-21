@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '7w8mj7=9$(2@htliyug3(nhcvrndbzya2-uhm=aqv#xfq%i&pr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -35,13 +35,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'minio_storage',
     'django_extensions',
+    'oauth2_provider',
     'rest_framework',
     'backend.account',
     'backend.institute',
     'backend.product',
-    'oauth2_provider',
     'mptt',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -125,13 +128,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = None 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/static"),
-]
-
+STATIC_ROOT = os.path.join(BASE_DIR / "frontend/static/")
 
 # Redirect urls
 
@@ -143,6 +141,11 @@ LOGOUT_REDIRECT_URL = 'admin:login'
 
 # Rest Framework settings
 
+AUTHENTICATION_BACKENDS = (
+    'oauth2_provider.backends.OAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
@@ -150,4 +153,72 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'backend.pagination.SimplePagePagination',
+    'PAGE_SIZE': 100,
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S'
 }
+
+# Swagger settings
+# Redirect url {host}/{static}/drf-yasg/swagger-ui-dist/oauth2-redirect.html
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'OAuth2': {
+            'type': 'oauth2',
+            'authorizationUrl': '/o/authorize/',
+            'tokenUrl': '/o/token/',
+            'flow': 'accessCode'
+        }
+    }
+}
+
+# Logging settings
+
+if not os.path.exists("logs"):
+    os.makedirs("logs")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "standard": {
+            "format": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+            "fmt": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+        },
+    },
+    "handlers": {
+        "null": {"level": "DEBUG", "class": "django.utils.log.AdminEmailHandler"},
+        "logfile": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(BASE_DIR, "logs/logfile.txt"),
+            "maxBytes": 50000,
+            "backupCount": 2,
+            "formatter": "standard",
+        },
+        "console": {"level": "INFO", "class": "logging.StreamHandler", "formatter": "standard"},
+        "dev_console": {"level": "DEBUG", "class": "logging.StreamHandler", "formatter": "standard"}
+    },
+    "loggers": {
+        "django": {"handlers": ["console"], "propagate": True, "level": "WARN"},
+        "django.db.backends": {"handlers": ["console", "dev_console"], "level": "DEBUG", "propagate": False},
+        "backend": {"handlers": ["console", "dev_console"], "level": "DEBUG"},
+        "backend.account": {"handlers": ["console", "dev_console"], "level": "DEBUG"},
+        "backend.institute": {"handlers": ["console", "dev_console"], "level": "DEBUG"},
+        "backend.product": {"handlers": ["console", "dev_console"], "level": "DEBUG"},
+    },
+}
+
+# Minio Storage Settings
+
+# DEFAULT_FILE_STORAGE = "minio_storage.storage.MinioMediaStorage"
+# STATICFILES_STORAGE = "minio_storage.storage.MinioStaticStorage"
+# MINIO_STORAGE_ENDPOINT = 'localhost:8000'
+# MINIO_STORAGE_ACCESS_KEY = 'KBP6WXGPS387090EZMG8'
+# MINIO_STORAGE_SECRET_KEY = 'DRjFXylyfMqn2zilAr33xORhaYz5r9e8r37XPz3A'
+# MINIO_STORAGE_USE_HTTPS = False
+# MINIO_STORAGE_MEDIA_BUCKET_NAME = 'media'
+# MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
+# MINIO_STORAGE_STATIC_BUCKET_NAME = 'static'
+# MINIO_STORAGE_AUTO_CREATE_STATIC_BUCKET = True

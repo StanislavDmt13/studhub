@@ -7,9 +7,9 @@ class TagModelAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
-@admin.register(models.ProductFile)
-class ProductFileAdmin(admin.TabularInline):
-    fields = '__all__'
+# @admin.register(models.ProductFile)
+# class ProductFileAdmin(admin.TabularInline):
+#     fields = '__all__'
 
 
 @admin.register(models.Product)
