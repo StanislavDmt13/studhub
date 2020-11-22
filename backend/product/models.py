@@ -19,7 +19,7 @@ class ProductFile(backend_models.AbstractCreatedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='files')
 
 
-class Rate(backend_models.AbstractCreatedModel):
+class ProductRate(backend_models.AbstractCreatedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="rates")
     user = models.ForeignKey(account_models.User, on_delete=models.CASCADE, related_name="rates")
     score = models.PositiveSmallIntegerField()

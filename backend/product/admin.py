@@ -17,7 +17,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
-@admin.register(models.Rate)
+@admin.register(models.ProductRate)
 class RateModelAdmin(admin.ModelAdmin):
     search_fields = ("product__name",)
 

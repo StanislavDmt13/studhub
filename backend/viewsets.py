@@ -36,3 +36,7 @@ class BaseManagerViewSet(BaseGenericViewSet, BaseAPIView):
     def list(self, request, *args, **kwargs):
         manager = self.get_manager(*args, **kwargs)
         return Response(manager.response())
+
+    def retrieve(self, request, *args, **kwargs):
+        manager = self.get_manager(*args, **kwargs)
+        return Response(manager.response())
