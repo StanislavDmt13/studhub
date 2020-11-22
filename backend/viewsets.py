@@ -1,3 +1,4 @@
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 
 from backend.views import BaseAPIView
@@ -23,11 +24,15 @@ class BaseManagerViewSet(BaseGenericViewSet, BaseAPIView):
     manager_classes = {}
 
     def get_manager_class(self):
-        assert self.manager_class, "Set manager class"
-        return self.manager_classes.get(self.action, self.manager_class)
+        manager = self.manager_classes.get(self.action, self.manager_class)
+        assert manager, "Set manager class"
+        return manager
 
     def get_manager(self, *args, **kwargs):
         kwargs.setdefault("context", self.get_serializer_context())
         manager = self.get_manager_class()
-        manager(user=self.user, *args, **kwargs)
-        return manager
+        return manager(user=self.user, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        manager = self.get_manager(*args, **kwargs)
+        return Response(manager.response())

@@ -9,3 +9,14 @@ class BaseManager:
 
         self.args = args
         self.kwargs = kwargs
+
+    def list(self):
+        pass
+
+    def retrieve(self):
+        pass
+
+    def response(self):
+        raise NotImplemented("""
+            Response must be implemented
+        """)
