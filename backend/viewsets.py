@@ -11,7 +11,7 @@ class BaseGenericViewSet(GenericViewSet, BaseAPIView):
         return self.serializer_classes.get(self.action, self.serializer_class)
 
 
-class BaseModelViewSet(ModelViewSet, BaseAPIView):
+class BaseModelViewSet(ModelViewSet, BaseGenericViewSet):
     pass
 
 

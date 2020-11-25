@@ -5,7 +5,6 @@ app_name = "account"
 
 router = routers.DefaultRouter()
 
-router.register('info', viewsets.UserViewSet, basename='info')
-router.register('rate', viewsets.UserRateViewSet, basename='rate')
+router.register('detail', viewsets.UserViewSet, basename='detail')
 
 urlpatterns = router.urls
