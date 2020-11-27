@@ -1,10 +1,14 @@
 import * as React from "react";
 import { render } from "react-dom";
 
+import App from './App';
+
 const root = window.document.getElementById("root");
 
+
 const init = async () => {
-  render(<h1>I Work</h1>, root);
+  
+  render(<App />, root);
 };
 
 init();
