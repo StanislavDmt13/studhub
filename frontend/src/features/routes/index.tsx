@@ -1,23 +1,31 @@
 import * as React from "react";
 import { Switch, Route } from "react-router-dom";
 
-// import { useStore } from "effector-react";
-// import { $routes } from "./model";
+import { useStore } from "effector-react";
+import { $routes } from "./model";
 
-import Home from '../../pages/Home';
+export { $routes } from "./model";
 
+export type { IMenuItem } from "./types";
+
+export { history } from "./history";
+
+import { initStore } from './model';
 
 const Router = () => {
-//   const routes = useStore($routes);
 
-    const routes = [
-        {
-            'id': 1,
-            'path': '',
-            'component': React.lazy(() => import("../../pages/Home")),
-            'helpUrl': ''
-        }
-    ]
+  initStore();
+  
+  const routes = useStore($routes);
+
+    // const routes = [
+    //     {
+    //         'id': 1,
+    //         'path': '',
+    //         'component': React.lazy(() => import("../../pages/Home")),
+    //         'helpUrl': ''
+    //     }
+    // ]
 
   return (
     <Switch>
@@ -27,7 +35,8 @@ const Router = () => {
           path={`${path}`}
           {...props}
           render={() => {
-            return <Component />;
+            //@ts-ignore
+            return <Component/>;
           }}
         />
       ))}
